@@ -18,7 +18,7 @@ app.get('/', function(request, response) {
   someDate.setDate(someDate.getDate() - 1);  // for yesterday's date because this runs at 1am local time
   var tmp = someDate.toJSON();
   var thisDate = tmp.slice(0,10).replace(/-/g,'-');
-  var wakaUrl = 'https://wakatime.com/api/v1/users/current/durations?api_key='+ wKey +'&date=' + thisDate;
+  var wakaUrl = 'https://wakatime.com/api/v1/users/current/summaries?api_key='+ wKey +'&date=' + thisDate;
   var tempData = [];
 
   // GET request to wakatime
@@ -36,10 +36,7 @@ app.get('/', function(request, response) {
       var startTime = wakaData.start;
       var now = Math.floor(new Date().getTime()/1000);  // getTime() returns milliseconds, need seconds
       var daystamp = thisDate.replace(/-/g, '');
-      var sum = wakaData.data.reduce((acc, elem) => {
-        return acc + elem.duration;
-      }, 0)
-      var total = sum / 60 / 60;
+      var total = wakaData.data.grand_total.total_seconds / 60 / 60;
 
       var beeBody = JSON.stringify({
         value: total,
